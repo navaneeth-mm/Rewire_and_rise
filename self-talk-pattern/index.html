@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rewire & Rise - Self-Talk Assessment</title>
+    <style>
+        :root {
+            --primary-orange: #E95B23;
+            --dark-gray: #4A4A4A;
+            --medium-gray: #666666;
+            --light-gray: #F8F9FA;
+            --text-color: #333333;
+            --white: #FFFFFF;
+            --timer-green: #28a745;
+            --timer-yellow: #ffc107;
+            --timer-red: #dc3545;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 550px;
+            margin: 20px auto;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .logo-myg { color: var(--primary-orange); font-weight: 800; font-size: 24px; margin: 0; }
+        .logo-sub { color: var(--medium-gray); font-size: 11px; font-weight: 600; letter-spacing: 1.5px; margin-top: 4px; text-transform: uppercase; }
+
+        .content { padding: 30px 25px; text-align: center; }
+        
+        .main-title { color: var(--primary-orange); font-size: 28px; font-weight: 800; margin: 10px 0; }
+        .sub-title { color: var(--dark-gray); font-size: 18px; margin-bottom: 20px; font-weight: 600; }
+        .welcome-text { color: var(--medium-gray); line-height: 1.5; margin-bottom: 30px; font-size: 15px; }
+
+        .info-box, .tips-box {
+            background: #F8F9FA;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .info-box { border-left: 4px solid var(--primary-orange); }
+
+        h4 { margin-top: 0; margin-bottom: 15px; color: #333; font-size: 16px; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { position: relative; padding-left: 20px; margin-bottom: 12px; font-size: 14px; color: #555; line-height: 1.4; }
+        .info-list li::before { content: "•"; color: var(--primary-orange); position: absolute; left: 0; font-weight: bold; }
+        .tips-list li::before { content: "✨"; position: absolute; left: 0; }
+
+        #assessment-screen, #results-screen { display: none; }
+        .progress-bar-bg { background: #eee; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 20px; }
+        .progress-bar-fill { background: var(--primary-orange); height: 100%; width: 0%; transition: width 0.3s ease; }
+        .timer-circle { display: inline-block; width: 50px; height: 50px; line-height: 50px; border-radius: 50%; font-weight: bold; border: 3px solid var(--timer-green); color: var(--timer-green); font-size: 18px; margin-bottom: 20px; }
+        #warning-msg { display: none; background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; border-left: 4px solid #ffeeba; text-align: left; }
+        .question-text { font-size: 19px; font-weight: 700; margin-bottom: 25px; line-height: 1.4; color: #222; text-align: left; }
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn { background: var(--white); border: 1.5px solid #e0e0e0; padding: 16px; border-radius: 10px; text-align: left; font-size: 15px; cursor: pointer; transition: 0.2s; outline: none; }
+        .option-btn:active { background: #fdf2ee; border-color: var(--primary-orange); }
+
+        .chart-row { margin-bottom: 15px; text-align: left; }
+        .chart-label { font-size: 13px; margin-bottom: 5px; display: flex; justify-content: space-between; font-weight: 600; }
+        .chart-bar-bg { background: #eee; height: 16px; border-radius: 8px; }
+        .chart-bar-fill { height: 100%; border-radius: 8px; background: var(--primary-orange); width: 0%; transition: width 1s ease-out; }
+
+        .time-label { font-size: 14px; color: var(--medium-gray); margin: 20px 0 30px; }
+        .final-note { font-size: 15px; color: var(--primary-orange); font-weight: bold; margin-top: 30px; line-height: 1.5; padding: 15px; border: 1px dashed var(--primary-orange); border-radius: 8px; }
+        .btn-primary { background-color: var(--primary-orange); color: white; border: none; padding: 15px 80px; font-size: 18px; font-weight: 700; border-radius: 35px; cursor: pointer; }
+        footer { padding: 20px; font-size: 11px; color: #aaa; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo-myg">myG</div>
+            <div class="logo-sub">LEARNING & DEVELOPMENT</div>
+        </header>
+
+        <div id="intro-screen" class="content">
+            <h1 class="main-title">Self-Talk Assessment</h1>
+            <h2 class="sub-title">Rewire & Rise</h2>
+            <p class="welcome-text">Identify your inner voice patterns for today's session.</p>
+
+            <div class="info-box">
+                <ul class="info-list">
+                    <li>12 mental scenarios.</li>
+                    <li>25 seconds per question.</li>
+                    <li>Automatic progression on selection.</li>
+                </ul>
+            </div>
+
+            <div class="tips-box">
+                <ul class="tips-list">
+                    <li>Go with your first instinct</li>
+                    <li>Be Honest to yourself</li>
+                </ul>
+            </div>
+
+            <p class="time-label">⏱️ <strong>Time:</strong> ~5 minutes</p>
+            <button class="btn-primary" onclick="startAssessment()">Let's Go</button>
+        </div>
+
+        <div id="assessment-screen" class="content">
+            <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
+            <div id="timer-display" class="timer-circle">25</div>
+            <div id="warning-msg">✨ <strong>First instinct!</strong> Go with your gut feeling!</div>
+            <div id="question-text" class="question-text"></div>
+            <div id="options-container" class="options-list"></div>
+        </div>
+
+        <div id="results-screen" class="content">
+            <h2 id="result-label" style="margin:0; font-size: 14px; color: #888; text-transform: uppercase; letter-spacing: 1px;">Your Pattern</h2>
+            <div id="dominant-type" style="color:var(--primary-orange); font-size:24px; font-weight:800; margin: 10px 0 15px;"></div>
+            <p id="type-description" style="line-height:1.6; color:#555; margin-bottom:25px; font-size: 15px;"></p>
+            
+            <div id="chart-area"></div>
+            
+            <div class="final-note">
+                Please keep this screen open for the presentation. <br>
+                We will be diving deep into these patterns.
+            </div>
+        </div>
+
+        <footer>Rewire & Rise • myG Learning & Development</footer>
+    </div>
+
+    <script>
+        var questions = [
+            { q: "You made a mistake at work that others noticed. Your first thought is...", options: { A: "It's okay, I can fix this and learn from it", B: "Alright, it happened. Let me see what to do next", C: "Why did I do that? I should have been more careful", D: "What if they think I'm incompetent? What if this affects everything?" } },
+            { q: "When you're trying something new and it feels difficult, you tell yourself...", options: { A: "This is hard, but I'm learning. I'll get better with practice", B: "Let's just take it step by step and see how it goes", C: "I'm not good at this. Maybe I'm not capable enough", D: "What if I can't do this? What if I fail in front of everyone?" } },
+            { q: "Before an important meeting or event, you usually think...", options: { A: "I'm prepared. I'll do my best and that's enough", B: "Let's see how this goes. I'll handle whatever comes", C: "I hope I don't mess this up. I need to be perfect", D: "So many things could go wrong. What if I'm not ready?" } },
+            { q: "When someone gives you critical feedback, your inner voice says...", options: { A: "This is helpful. I can use this to improve", B: "Okay, noted. Let me think about what's useful here", C: "They're right. I'm not doing well enough", D: "What if they've lost confidence in me? What if others feel the same?" } },
+            { q: "At the end of a busy day, when you review what happened, you typically think...", options: { A: "I did well with what I had. Tomorrow is another chance to grow", B: "It was what it was. Time to rest and continue tomorrow", C: "I could have done better. I wasted time on some things", D: "Did I do enough? What if I'm falling behind?" } },
+            { q: "When you compare yourself to others who seem more successful, you think...", options: { A: "Everyone has their own journey. I'm on my path", B: "They're doing their thing, I'm doing mine", C: "I'm so far behind. I should be where they are by now", D: "What if I never reach that level? What if I'm not capable?" } },
+            { q: "When plans change unexpectedly, your immediate thought is...", options: { A: "Things change. I can adapt and find a way forward", B: "Okay, let's adjust and see what works now", C: "Why didn't I prepare better? I should have seen this coming", D: "What else will go wrong? How will I handle everything?" } },
+            { q: "After you accomplish something you worked hard on, you tell yourself...", options: { A: "I'm proud of this. My effort paid off", B: "Good, it's done. On to the next thing", C: "It's fine, but I could have done it better or faster", D: "I'm relieved it's over. I hope it's good enough" } },
+            { q: "When facing a decision with uncertain outcomes, you think...", options: { A: "I'll make the best choice I can with what I know", B: "I'll decide based on what makes sense right now", C: "What if I choose wrong? I need to be absolutely sure", D: "There are so many ways this could go badly. What should I do?" } },
+            { q: "On a difficult morning when nothing seems to go right, your inner voice says...", options: { A: "Rough start, but I can turn this around", B: "It's just one of those mornings. Keep moving", C: "Of course this is happening to me. I never get it right", D: "Is this a sign? What if the whole day goes like this?" } },
+            { q: "When thinking about your future, you usually feel...", options: { A: "Hopeful and curious about what I'll create and become", B: "It'll unfold as it does. I'll deal with things as they come", C: "Pressured to achieve more and prove myself", D: "Uncertain and worried about whether things will work out" } },
+            { q: "When you can't sleep at night, your mind often...", options: { A: "Thinks about things you're grateful for or looking forward to", B: "Stays fairly quiet or observes thoughts without much reaction", C: "Reviews your mistakes or what you should do better", D: "Worries about problems or things that might go wrong" } }
+        ];
+
+        var typeNames = { A: "Encouraging", B: "Neutral", C: "Critical", D: "Anxious" };
+        
+        var descriptions = {
+            "Encouraging": "Your self-talk is primarily supportive and growth-oriented. This means you tend to bounce back from setbacks and approach challenges with optimism.",
+            "Neutral": "Your self-talk is primarily calm and objective. This means you tend to stay grounded and navigate uncertainty without emotional overwhelm.",
+            "Critical": "Your self-talk is primarily harsh and self-demanding. This means you tend to hold yourself to high standards, but may struggle with self-doubt.",
+            "Anxious": "Your self-talk is primarily worried and fear-driven. This means you tend to anticipate problems and feel cautious about taking risks.",
+            "Encouraging + Neutral": "You balance between supportive and objective self-talk. This combination means you stay optimistic while remaining grounded in reality.",
+            "Encouraging + Critical": "You balance between supportive and demanding self-talk. This combination means you push yourself hard but also recognize your progress and worth.",
+            "Encouraging + Anxious": "You balance between optimistic and worried self-talk. This combination means you hope for the best while preparing for potential challenges.",
+            "Neutral + Critical": "You balance between objective and demanding self-talk. This combination means you assess situations clearly but may be hard on yourself about outcomes.",
+            "Neutral + Anxious": "You balance between calm observation and worried anticipation. This combination means you stay composed on the surface while managing underlying concerns.",
+            "Critical + Anxious": "You balance between self-judgment and fear-driven self-talk. This combination means you face both internal pressure and worry about potential failure."
+        };
+
+        var currentIdx = 0;
+        var scores = { A: 0, B: 0, C: 0, D: 0 };
+        var timerValue = 25;
+        var timerInterval = null;
+
+        function startAssessment() {
+            document.getElementById('intro-screen').style.display = 'none';
+            document.getElementById('assessment-screen').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentIdx >= questions.length) { showResults(); return; }
+            document.getElementById('warning-msg').style.display = 'none';
+            var qData = questions[currentIdx];
+            document.getElementById('question-text').innerText = qData.q;
+            document.getElementById('progress-fill').style.width = Math.round((currentIdx / questions.length) * 100) + "%";
+            
+            var container = document.getElementById('options-container');
+            container.innerHTML = '';
+            var keys = ['A', 'B', 'C', 'D'];
+            for (let i = keys.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [keys[i], keys[j]] = [keys[j], keys[i]];
+            }
+            keys.forEach(function(key) {
+                var btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = qData.options[key];
+                btn.onclick = function() { selectOption(key); };
+                container.appendChild(btn);
+            });
+            resetTimer();
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerValue = 25; updateTimerUI();
+            timerInterval = setInterval(function() {
+                timerValue--;
+                if (timerValue <= -5) document.getElementById('warning-msg').style.display = 'block';
+                updateTimerUI();
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            var el = document.getElementById('timer-display');
+            var val = timerValue < 0 ? 0 : timerValue;
+            el.innerText = val;
+            if (timerValue > 15) el.style.borderColor = el.style.color = 'var(--timer-green)';
+            else if (timerValue > 5) el.style.borderColor = el.style.color = 'var(--timer-yellow)';
+            else el.style.borderColor = el.style.color = 'var(--timer-red)';
+        }
+
+        function selectOption(key) {
+            scores[key]++;
+            clearInterval(timerInterval);
+            currentIdx++;
+            loadQuestion();
+        }
+
+        function showResults() {
+            document.getElementById('assessment-screen').style.display = 'none';
+            document.getElementById('results-screen').style.display = 'block';
+            
+            var maxScore = Math.max(scores.A, scores.B, scores.C, scores.D);
+            var winners = [];
+            ['A', 'B', 'C', 'D'].forEach(function(k) { if (scores[k] === maxScore) winners.push(typeNames[k]); });
+            
+            var finalTitle = "";
+            var finalDesc = "";
+            var label = "Your Pattern";
+
+            if (winners.length === 1) {
+                label = "Dominant Pattern";
+                finalTitle = winners[0];
+                finalDesc = descriptions[winners[0]];
+            } else if (winners.length === 2) {
+                label = "Dual Pattern";
+                finalTitle = winners[0] + " + " + winners[1];
+                finalDesc = descriptions[finalTitle] || "You balance multiple self-talk modes effectively.";
+            } else if (winners.length === 3) {
+                label = "Multi-Pattern";
+                finalTitle = winners.join(" / ");
+                finalDesc = "Your inner voice shifts between " + winners[0].toLowerCase() + ", " + winners[1].toLowerCase() + ", and " + winners[2].toLowerCase() + " tones. You have a flexible but complex self-talk landscape that adapts to different situations.";
+            } else {
+                label = "Balanced Pattern";
+                finalTitle = "Balanced";
+                finalDesc = "You engage all four self-talk modes—encouraging, neutral, critical, and anxious—relatively equally. This suggests strong adaptability, though your inner voice may shift significantly based on context.";
+            }
+
+            document.getElementById('result-label').innerText = label;
+            document.getElementById('dominant-type').innerText = finalTitle;
+            document.getElementById('type-description').innerText = finalDesc;
+
+            var chartArea = document.getElementById('chart-area');
+            chartArea.innerHTML = '';
+            ['A','B','C','D'].forEach(function(k) {
+                var pct = (scores[k] / 12) * 100;
+                chartArea.innerHTML += `
+                    <div class="chart-row">
+                        <div class="chart-label"><span>${typeNames[k]}</span><span>${scores[k]} pts</span></div>
+                        <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${pct}%"></div></div>
+                    </div>`;
+            });
+        }
+    </script>
+</body>
+</html>
