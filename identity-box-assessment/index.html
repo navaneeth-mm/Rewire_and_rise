@@ -1,1 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rewire & Rise - Identity Box Assessment</title>
+    <style>
+        :root {
+            --primary-orange: #E95B23;
+            --dark-gray: #4A4A4A;
+            --medium-gray: #666666;
+            --light-gray: #F8F9FA;
+            --text-color: #333333;
+            --white: #FFFFFF;
+            --timer-green: #28a745;
+            --timer-yellow: #ffc107;
+            --timer-red: #dc3545;
+        }
 
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 550px;
+            margin: 20px auto;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .logo-myg { color: var(--primary-orange); font-weight: 800; font-size: 24px; margin: 0; }
+        .logo-sub { color: var(--medium-gray); font-size: 11px; font-weight: 600; letter-spacing: 1.5px; margin-top: 4px; text-transform: uppercase; }
+
+        .content { padding: 30px 25px; text-align: center; }
+        
+        .main-title { color: var(--primary-orange); font-size: 28px; font-weight: 800; margin: 10px 0; }
+        .sub-title { color: var(--dark-gray); font-size: 18px; margin-bottom: 20px; font-weight: 600; }
+        .welcome-text { color: var(--medium-gray); line-height: 1.5; margin-bottom: 30px; font-size: 15px; }
+
+        .info-box, .tips-box {
+            background: #F8F9FA;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .info-box { border-left: 4px solid var(--primary-orange); }
+
+        h4 { margin-top: 0; margin-bottom: 15px; color: #333; font-size: 16px; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { position: relative; padding-left: 20px; margin-bottom: 12px; font-size: 14px; color: #555; line-height: 1.4; }
+        .info-list li::before { content: "•"; color: var(--primary-orange); position: absolute; left: 0; font-weight: bold; }
+        .tips-list li::before { content: "✨"; position: absolute; left: 0; }
+
+        #assessment-screen, #results-screen { display: none; }
+        .progress-bar-bg { background: #eee; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 20px; }
+        .progress-bar-fill { background: var(--primary-orange); height: 100%; width: 0%; transition: width 0.3s ease; }
+        .timer-circle { display: inline-block; width: 50px; height: 50px; line-height: 50px; border-radius: 50%; font-weight: bold; border: 3px solid var(--timer-green); color: var(--timer-green); font-size: 18px; margin-bottom: 20px; }
+        #warning-msg { display: none; background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; border-left: 4px solid #ffeeba; text-align: left; }
+        .question-text { font-size: 19px; font-weight: 700; margin-bottom: 25px; line-height: 1.4; color: #222; text-align: left; }
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn { background: var(--white); border: 1.5px solid #e0e0e0; padding: 16px; border-radius: 10px; text-align: left; font-size: 15px; cursor: pointer; transition: 0.2s; outline: none; }
+        .option-btn:active { background: #fdf2ee; border-color: var(--primary-orange); }
+
+        .chart-row { margin-bottom: 15px; text-align: left; }
+        .chart-label { font-size: 13px; margin-bottom: 5px; display: flex; justify-content: space-between; font-weight: 600; }
+        .chart-bar-bg { background: #eee; height: 16px; border-radius: 8px; }
+        .chart-bar-fill { height: 100%; border-radius: 8px; background: var(--primary-orange); width: 0%; transition: width 1s ease-out; }
+
+        .time-label { font-size: 14px; color: var(--medium-gray); margin: 20px 0 30px; }
+        .final-note { font-size: 15px; color: var(--primary-orange); font-weight: bold; margin-top: 30px; line-height: 1.5; padding: 15px; border: 1px dashed var(--primary-orange); border-radius: 8px; }
+        .btn-primary { background-color: var(--primary-orange); color: white; border: none; padding: 15px 80px; font-size: 18px; font-weight: 700; border-radius: 35px; cursor: pointer; }
+        footer { padding: 20px; font-size: 11px; color: #aaa; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo-myg">myG</div>
+            <div class="logo-sub">LEARNING & DEVELOPMENT</div>
+        </header>
+
+        <div id="intro-screen" class="content">
+            <h1 class="main-title">Identity Box Assessment</h1>
+            <h2 class="sub-title">Rewire & Rise</h2>
+            <p class="welcome-text">Explore the labels and beliefs that define your "Identity Box" for today's session.</p>
+
+            <div class="info-box">
+                <ul class="info-list">
+                    <li>12 situational questions.</li>
+                    <li>25 seconds per question.</li>
+                    <li>Automatic progression on selection.</li>
+                </ul>
+            </div>
+
+            <div class="tips-box">
+                <ul class="tips-list">
+                    <li>Go with your first instinct</li>
+                    <li>Be Honest to yourself</li>
+                </ul>
+            </div>
+
+            <p class="time-label">⏱️ <strong>Time:</strong> ~5 minutes</p>
+            <button class="btn-primary" onclick="startAssessment()">Start Now</button>
+        </div>
+
+        <div id="assessment-screen" class="content">
+            <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
+            <div id="timer-display" class="timer-circle">25</div>
+            <div id="warning-msg">✨ <strong>First instinct!</strong> Stay honest with yourself!</div>
+            <div id="question-text" class="question-text"></div>
+            <div id="options-container" class="options-list"></div>
+        </div>
+
+        <div id="results-screen" class="content">
+            <h2 id="result-label" style="margin:0; font-size: 14px; color: #888; text-transform: uppercase; letter-spacing: 1px;">Your Box Profile</h2>
+            <div id="dominant-type" style="color:var(--primary-orange); font-size:24px; font-weight:800; margin: 10px 0 15px;"></div>
+            <p id="type-description" style="line-height:1.6; color:#555; margin-bottom:25px; font-size: 15px; text-align: left;"></p>
+            
+            <div id="chart-area"></div>
+            
+            <div class="final-note">
+                Please keep this screen open for the presentation. <br>
+                We will be diving deep into these identity boxes.
+            </div>
+        </div>
+
+        <footer>Rewire & Rise • myG Learning & Development</footer>
+    </div>
+
+    <script>
+        var questions = [
+            { q: "When someone invites you to try something you've never done before, you usually decline because...", options: { A: "I'm not that kind of person — it's just not me", B: "I'm not good at those types of things", C: "I have too many responsibilities to others right now", D: "Things like that don't usually work out for me" } },
+            { q: "When you think about learning a completely new skill, what stops you most?", options: { A: "It doesn't fit who I am or my personality", B: "I don't have the talent or natural ability for something like that", C: "I have too many responsibilities to family and work right now", D: "People like me don't usually succeed at learning new things like that" } },
+            { q: "You receive praise for something outside your usual strengths. Your honest reaction is...", options: { A: "That's nice, but it's not really who I am", B: "I got lucky this time, but I'm not actually good at it", C: "I appreciate it, but I should focus on what's expected of me", D: "I'm surprised — good things don't usually come to me easily" } },
+            { q: "When you look back at a goal you once had but didn't pursue, you believe it didn't happen because...", options: { A: "It wasn't really aligned with who I am as a person", B: "I didn't have the right abilities or intelligence for it", C: "My responsibilities to others had to come first", D: "Based on my past, it just wasn't meant to be for me" } },
+            { q: "A friend suggests you could develop a skill you've never had. You think...", options: { A: "Maybe, but that's just not the type of person I am", B: "I don't think I have the natural ability for that", C: "I don't have time — others need me to focus on what I already do", D: "I've tried changing before and it didn't work out" } },
+            { q: "When you consider joining a new group or community, you hesitate because...", options: { A: "I'm not the type of person who fits into new groups easily", B: "I'm not interesting or skilled enough to add value there", C: "I need to prioritize my existing commitments to family and work", D: "New things like that usually don't work out well for me" } },
+            { q: "You notice someone similar to you succeeding at something you want. You think...", options: { A: "Good for them, but we're different kinds of people", B: "They must be naturally better at it than I am", C: "They probably have fewer obligations or more freedom than I do", D: "They're lucky — things just work out differently for them" } },
+            { q: "When someone says 'You could be different if you wanted,' you feel...", options: { A: "They don't understand — this is just who I am", B: "That's not realistic — I don't have what it takes", C: "Maybe, but I can't abandon my responsibilities to find out", D: "I've tried before and it didn't change anything" } },
+            { q: "What would you say is the biggest reason you haven't pursued something you once wanted?", options: { A: "It wasn't aligned with my true nature or personality", B: "I realized I didn't have the ability or intelligence for it", C: "My role in my family/work didn't leave room for it", D: "My background or past experiences made it unrealistic" } },
+            { q: "When you think about personal growth or change, the strongest barrier is...", options: { A: "I am who I am — changing feels inauthentic", B: "I'm limited by what I'm naturally capable of", C: "I'm defined by what I do for others — that comes first", D: "My history shows change doesn't really stick for me" } },
+            { q: "If someone close to you said, 'You're holding yourself back,' you'd most likely think...", options: { A: "They don't get it — I know who I am and what fits me", B: "They're being kind, but they overestimate what I can do", C: "Maybe, but I can't just think about myself", D: "They mean well, but they don't know my story" } },
+            { q: "When you feel stuck, you usually believe it's because...", options: { A: "This is just how I'm wired as a person", B: "I don't have the right skills or intelligence to move forward", C: "I'm needed where I am — others depend on me", D: "My past patterns and experiences keep repeating" } }
+        ];
+
+        var boxNames = { A: "Self-Definition", B: "Ability", C: "Responsibility", D: "Past Patterns" };
+        
+        var boxDescriptions = {
+            "Self-Definition": "Your box is built around how you define 'who I am.' You tend to avoid things that feel inauthentic to your current personality, potentially limiting your growth to what feels familiar.",
+            "Ability": "Your box is built around your perceived talents and intelligence. You tend to stay within the boundaries of what you believe you are naturally good at, avoiding the risk of looking 'incapable.'",
+            "Responsibility": "Your box is built around your roles and obligations to others. You often prioritize external expectations and responsibilities over your own personal exploration or change.",
+            "Past Patterns": "Your box is built around your history and experiences. You tend to view the future through the lens of the past, believing that 'how it has been' is 'how it will always be.'"
+        };
+
+        var currentIdx = 0;
+        var scores = { A: 0, B: 0, C: 0, D: 0 };
+        var timerValue = 25;
+        var timerInterval = null;
+
+        function startAssessment() {
+            document.getElementById('intro-screen').style.display = 'none';
+            document.getElementById('assessment-screen').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentIdx >= questions.length) { showResults(); return; }
+            document.getElementById('warning-msg').style.display = 'none';
+            var qData = questions[currentIdx];
+            document.getElementById('question-text').innerText = qData.q;
+            document.getElementById('progress-fill').style.width = Math.round((currentIdx / questions.length) * 100) + "%";
+            
+            var container = document.getElementById('options-container');
+            container.innerHTML = '';
+            var keys = ['A', 'B', 'C', 'D'];
+            for (let i = keys.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [keys[i], keys[j]] = [keys[j], keys[i]];
+            }
+            keys.forEach(function(key) {
+                var btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = qData.options[key];
+                btn.onclick = function() { selectOption(key); };
+                container.appendChild(btn);
+            });
+            resetTimer();
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerValue = 25; updateTimerUI();
+            timerInterval = setInterval(function() {
+                timerValue--;
+                if (timerValue <= -5) document.getElementById('warning-msg').style.display = 'block';
+                updateTimerUI();
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            var el = document.getElementById('timer-display');
+            var val = timerValue < 0 ? 0 : timerValue;
+            el.innerText = val;
+            if (timerValue > 15) el.style.borderColor = el.style.color = 'var(--timer-green)';
+            else if (timerValue > 5) el.style.borderColor = el.style.color = 'var(--timer-yellow)';
+            else el.style.borderColor = el.style.color = 'var(--timer-red)';
+        }
+
+        function selectOption(key) {
+            scores[key]++;
+            clearInterval(timerInterval);
+            currentIdx++;
+            loadQuestion();
+        }
+
+        function showResults() {
+            document.getElementById('assessment-screen').style.display = 'none';
+            document.getElementById('results-screen').style.display = 'block';
+            
+            var maxScore = Math.max(scores.A, scores.B, scores.C, scores.D);
+            var winners = [];
+            ['A', 'B', 'C', 'D'].forEach(function(k) { if (scores[k] === maxScore) winners.push(boxNames[k]); });
+            
+            var finalTitle = "";
+            var finalDesc = "";
+            var label = "Your Dominant Box";
+
+            if (winners.length === 1) {
+                finalTitle = winners[0];
+                finalDesc = boxDescriptions[winners[0]];
+            } else if (winners.length === 2) {
+                label = "Dual Pattern Box";
+                finalTitle = winners[0] + " & " + winners[1];
+                finalDesc = "You balance between " + winners[0].toLowerCase() + " and " + winners[1].toLowerCase() + " beliefs. Your identity box is shaped by both who you believe you are and your external or past constraints.";
+            } else if (winners.length === 3) {
+                label = "Multi-Pattern Box";
+                finalTitle = winners.join(" / ");
+                finalDesc = "Your identity is influenced by a complex mix of " + winners[0].toLowerCase() + ", " + winners[1].toLowerCase() + ", and " + winners[2].toLowerCase() + " factors. You adapt your 'box' based on the specific pressure of the situation.";
+            } else {
+                label = "Balanced Box Profile";
+                finalTitle = "Fluid / Balanced";
+                finalDesc = "You engage all four identity boxes—Self-Definition, Ability, Responsibility, and Past Patterns—relatively equally. This suggests a flexible identity, though you may feel pulled in many directions at once.";
+            }
+
+            document.getElementById('result-label').innerText = label;
+            document.getElementById('dominant-type').innerText = finalTitle;
+            document.getElementById('type-description').innerText = finalDesc;
+
+            var chartArea = document.getElementById('chart-area');
+            chartArea.innerHTML = '<h4 style="text-align:left; color:#888; font-size:12px; margin-bottom:20px; letter-spacing:1px;">BOX DIMENSIONS</h4>';
+            ['A','B','C','D'].forEach(function(k) {
+                var pct = (scores[k] / 12) * 100;
+                chartArea.innerHTML += `
+                    <div class="chart-row">
+                        <div class="chart-label"><span>${boxNames[k]}</span><span>${scores[k]} pts</span></div>
+                        <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${pct}%"></div></div>
+                    </div>`;
+            });
+        }
+    </script>
+</body>
+</html>
