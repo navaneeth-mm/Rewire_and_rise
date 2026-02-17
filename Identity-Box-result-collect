@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rewire & Rise - Identity Box Assessment</title>
+    <style>
+        :root {
+            --primary-orange: #E95B23;
+            --dark-gray: #4A4A4A;
+            --medium-gray: #666666;
+            --light-gray: #F8F9FA;
+            --text-color: #333333;
+            --white: #FFFFFF;
+            --timer-green: #28a745;
+            --timer-yellow: #ffc107;
+            --timer-red: #dc3545;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 550px;
+            margin: 20px auto;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .logo-myg { color: var(--primary-orange); font-weight: 800; font-size: 24px; margin: 0; }
+        .logo-sub { color: var(--medium-gray); font-size: 11px; font-weight: 600; letter-spacing: 1.5px; margin-top: 4px; text-transform: uppercase; }
+
+        .content { padding: 30px 25px; text-align: center; }
+        
+        .main-title { color: var(--primary-orange); font-size: 28px; font-weight: 800; margin: 10px 0; }
+        .sub-title { color: var(--dark-gray); font-size: 18px; margin-bottom: 20px; font-weight: 600; }
+
+        #assessment-screen, #results-screen { display: none; }
+        .progress-bar-bg { background: #eee; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 20px; }
+        .progress-bar-fill { background: var(--primary-orange); height: 100%; width: 0%; transition: width 0.3s ease; }
+        .timer-circle { display: inline-block; width: 50px; height: 50px; line-height: 50px; border-radius: 50%; font-weight: bold; border: 3px solid var(--timer-green); color: var(--timer-green); font-size: 18px; margin-bottom: 20px; }
+        
+        .question-text { font-size: 19px; font-weight: 700; margin-bottom: 25px; line-height: 1.4; color: #222; text-align: left; }
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn { background: var(--white); border: 1.5px solid #e0e0e0; padding: 16px; border-radius: 10px; text-align: left; font-size: 15px; cursor: pointer; transition: 0.2s; outline: none; }
+        .option-btn:active { background: #fdf2ee; border-color: var(--primary-orange); }
+
+        .result-card { text-align: left; background: #fffaf8; border: 1px solid #ffece5; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        .result-header { color: var(--primary-orange); font-weight: 800; font-size: 22px; margin-bottom: 10px; }
+        .result-section { margin-bottom: 15px; font-size: 14px; }
+        .result-section strong { color: #333; display: block; margin-bottom: 4px; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+
+        .chart-row { margin-bottom: 12px; text-align: left; }
+        .chart-label { font-size: 12px; margin-bottom: 4px; display: flex; justify-content: space-between; font-weight: 600; }
+        .chart-bar-bg { background: #eee; height: 12px; border-radius: 6px; }
+        .chart-bar-fill { height: 100%; border-radius: 6px; background: var(--primary-orange); width: 0%; transition: width 1s ease-out; }
+
+        .btn-primary { background-color: var(--primary-orange); color: white; border: none; padding: 15px 80px; font-size: 18px; font-weight: 700; border-radius: 35px; cursor: pointer; }
+        .final-note { font-size: 14px; color: var(--primary-orange); font-weight: bold; margin-top: 25px; padding: 12px; border: 1px dashed var(--primary-orange); border-radius: 8px; line-height: 1.4; }
+        footer { padding: 20px; font-size: 10px; color: #aaa; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo-myg">myG</div>
+            <div class="logo-sub">LEARNING & DEVELOPMENT</div>
+        </header>
+
+        <div id="intro-screen" class="content">
+            <h1 class="main-title">Identity Box Assessment</h1>
+            <h2 class="sub-title">Rewire & Rise</h2>
+            <p style="color: #666; font-size: 15px; margin-bottom: 30px;">Discover the psychological "boxes" that may be limiting your growth and personal narrative.</p>
+            <button class="btn-primary" onclick="startAssessment()">Start Now</button>
+        </div>
+
+        <div id="assessment-screen" class="content">
+            <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
+            <div id="timer-display" class="timer-circle">25</div>
+            <div id="question-text" class="question-text"></div>
+            <div id="options-container" class="options-list"></div>
+        </div>
+
+        <div id="results-screen" class="content">
+            <h2 style="margin:0; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Your Dominant Box</h2>
+            
+            <div id="result-container"></div>
+
+            <div id="chart-area" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                <h4 style="text-align:left; color:#888; font-size:11px; margin-bottom:15px; letter-spacing:1px;">DISTRIBUTION</h4>
+            </div>
+            
+            <div class="final-note">
+                Please keep this screen open for the presentation. We will be diving deep into these quadrants.
+            </div>
+        </div>
+
+        <footer>Rewire & Rise • myG Learning & Development</footer>
+    </div>
+
+    <script>
+        var questions = [
+            { q: "When someone invites you to try something you've never done before, you usually decline because...", options: { A: "I'm not that kind of person — it's just not me", B: "I'm not good at those types of things", C: "I have too many responsibilities to others right now", D: "Things like that don't usually work out for me" } },
+            { q: "When you think about learning a completely new skill, what stops you most?", options: { A: "It doesn't fit who I am or my personality", B: "I don't have the talent or natural ability for something like that", C: "I have too many responsibilities to family and work right now", D: "People like me don't usually succeed at learning new things like that" } },
+            { q: "You receive praise for something outside your usual strengths. Your honest reaction is...", options: { A: "That's nice, but it's not really who I am", B: "I got lucky this time, but I'm not actually good at it", C: "I appreciate it, but I should focus on what's expected of me", D: "I'm surprised — good things don't usually come to me easily" } },
+            { q: "When you look back at a goal you once had but didn't pursue, you believe it didn't happen because...", options: { A: "It wasn't really aligned with who I am as a person", B: "I didn't have the right abilities or intelligence for it", C: "My responsibilities to others had to come first", D: "Based on my past, it just wasn't meant to be for me" } },
+            { q: "A friend suggests you could develop a skill you've never had. You think...", options: { A: "Maybe, but that's just not the type of person I am", B: "I don't think I have the natural ability for that", C: "I don't have time — others need me to focus on what I already do", D: "I've tried changing before and it didn't work out" } },
+            { q: "When you consider joining a new group or community, you hesitate because...", options: { A: "I'm not the type of person who fits into new groups easily", B: "I'm not interesting or skilled enough to add value there", C: "I need to prioritize my existing commitments to family and work", D: "New things like that usually don't work out well for me" } },
+            { q: "You notice someone similar to you succeeding at something you want. You think...", options: { A: "Good for them, but we're different kinds of people", B: "They must be naturally better at it than I am", C: "They probably have fewer obligations or more freedom than I do", D: "They're lucky — things just work out differently for them" } },
+            { q: "When someone says 'You could be different if you wanted,' you feel...", options: { A: "They don't understand — this is just who I am", B: "That's not realistic — I don't have what it takes", C: "Maybe, but I can't abandon my responsibilities to find out", D: "I've tried before and it didn't change anything" } },
+            { q: "What would you say is the biggest reason you haven't pursued something you once wanted?", options: { A: "It wasn't aligned with my true nature or personality", B: "I realized I didn't have the ability or intelligence for it", C: "My role in my family/work didn't leave room for it", D: "My background or past experiences made it unrealistic" } },
+            { q: "When you think about personal growth or change, the strongest barrier is...", options: { A: "I am who I am — changing feels inauthentic", B: "I'm limited by what I'm naturally capable of", C: "I'm defined by what I do for others — that comes first", D: "My history shows change doesn't really stick for me" } },
+            { q: "If someone close to you said, 'You're holding yourself back,' you'd most likely think...", options: { A: "They don't get it — I know who I am and what fits me", B: "They're being kind, but they overestimate what I can do", C: "Maybe, but I can't just think about myself", D: "They mean well, but they don't know my story" } },
+            { q: "When you feel stuck, you usually believe it's because...", options: { A: "This is just how I'm wired as a person", B: "I don't have the right skills or intelligence to move forward", C: "I'm needed where I am — others depend on me", D: "My past patterns and experiences keep repeating" } }
+        ];
+
+        var boxData = {
+            A: { name: "Personality-Based", belief: "“I am this kind of person — and that’s just who I am.”", patterns: "Labels like 'I’m shy' or 'not a people person'. Seeing traits as fixed limitations.", growth: "Explore flexibility. View identity as expansive, not restrictive." },
+            B: { name: "Ability-Based", belief: "“I’m just not good at this kind of thing.”", patterns: "Believing talent is fixed. Avoiding 'hard' tasks. Internalizing early failures.", growth: "Embrace a growth mindset. Skill is separate from identity." },
+            C: { name: "Role-Based", belief: "“This is who I am to others — I can’t change that.”", patterns: "Feeling trapped in roles like 'the helper' or 'the provider'. Confusing titles with identity.", growth: "Ask: 'Who am I outside this role?' Practice setting boundaries." },
+            D: { name: "Belief-Based", belief: "“My past or experiences prove I’m not enough.”", patterns: "Fear-driven doubt. Holding on to past rejections. Limiting old stories.", growth: "Challenge old stories. Reclaim the power to rewrite your narrative." }
+        };
+
+        var currentIdx = 0;
+        var scores = { A: 0, B: 0, C: 0, D: 0 };
+        var timerValue = 25;
+        var timerInterval = null;
+
+        async function collectData(finalScores, dominantBox) {
+            const endpoint = "https://formspree.io/f/xkovbpvz"; 
+            
+            const payload = {
+                assessment: "Identity Box Assessment",
+                dominant_result: dominantBox,
+                score_personality: finalScores.A,
+                score_ability: finalScores.B,
+                score_role: finalScores.C,
+                score_belief: finalScores.D,
+                timestamp: new Date().toLocaleString()
+            };
+
+            try {
+                await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (e) {
+                console.warn("Background data collection failed, results shown locally.");
+            }
+        }
+
+        function startAssessment() {
+            document.getElementById('intro-screen').style.display = 'none';
+            document.getElementById('assessment-screen').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentIdx >= questions.length) { showResults(); return; }
+            var qData = questions[currentIdx];
+            document.getElementById('question-text').innerText = qData.q;
+            document.getElementById('progress-fill').style.width = Math.round((currentIdx / questions.length) * 100) + "%";
+            
+            var container = document.getElementById('options-container');
+            container.innerHTML = '';
+            var keys = ['A', 'B', 'C', 'D'];
+            for (let i = keys.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [keys[i], keys[j]] = [keys[j], keys[i]];
+            }
+            keys.forEach(function(key) {
+                var btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = qData.options[key];
+                btn.onclick = function() { selectOption(key); };
+                container.appendChild(btn);
+            });
+            resetTimer();
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerValue = 25; updateTimerUI();
+            timerInterval = setInterval(function() {
+                timerValue--; updateTimerUI();
+                if (timerValue < 0) selectOption(Object.keys(scores)[Math.floor(Math.random()*4)]); 
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            var el = document.getElementById('timer-display');
+            el.innerText = timerValue < 0 ? 0 : timerValue;
+            if (timerValue > 15) el.style.borderColor = el.style.color = 'var(--timer-green)';
+            else if (timerValue > 5) el.style.borderColor = el.style.color = 'var(--timer-yellow)';
+            else el.style.borderColor = el.style.color = 'var(--timer-red)';
+        }
+
+        function selectOption(key) {
+            scores[key]++;
+            clearInterval(timerInterval);
+            currentIdx++;
+            loadQuestion();
+        }
+
+        function showResults() {
+            document.getElementById('assessment-screen').style.display = 'none';
+            document.getElementById('results-screen').style.display = 'block';
+            
+            var maxScore = Math.max(scores.A, scores.B, scores.C, scores.D);
+            var winnerKeys = Object.keys(scores).filter(k => scores[k] === maxScore);
+            var resultContainer = document.getElementById('result-container');
+            var winnerNames = winnerKeys.map(k => boxData[k].name);
+            
+            collectData(scores, winnerNames.join(", "));
+
+            winnerKeys.forEach(k => {
+                var data = boxData[k];
+                resultContainer.innerHTML += `
+                    <div class="result-card">
+                        <div class="result-header">${data.name} Box</div>
+                        <div class="result-section"><strong>Core Belief</strong>${data.belief}</div>
+                        <div class="result-section"><strong>Patterns</strong>${data.patterns}</div>
+                        <div class="result-section"><strong>Growth Path</strong>${data.growth}</div>
+                    </div>
+                `;
+            });
+
+            var chartArea = document.getElementById('chart-area');
+            ['A','B','C','D'].forEach(k => {
+                var pct = (scores[k] / 12) * 100;
+                chartArea.innerHTML += `
+                    <div class="chart-row">
+                        <div class="chart-label"><span>${boxData[k].name}</span><span>${scores[k]} pts</span></div>
+                        <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${pct}%"></div></div>
+                    </div>`;
+            });
+        }
+    </script>
+</body>
+</html>
