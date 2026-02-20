@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rewire & Rise - Digital Assessment</title>
-    
+    <title>Rewire & Rise - Personality Assessment</title>
     <style>
         :root {
             --primary-orange: #E95B23;
@@ -58,6 +57,7 @@
         .sub-title { color: var(--dark-gray); font-size: 20px; margin-bottom: 20px; font-weight: 600; }
         .welcome-text { color: var(--medium-gray); line-height: 1.5; margin-bottom: 30px; font-size: 15px; }
 
+        /* Restoring your original box styles */
         .info-box, .tips-box {
             background: #F8F9FA;
             border-radius: 8px;
@@ -67,6 +67,7 @@
         }
         .info-box { border-left: 4px solid var(--primary-orange); }
 
+        h4 { margin-top: 0; margin-bottom: 15px; color: #333; font-size: 16px; }
         ul { list-style: none; padding: 0; margin: 0; }
         li { position: relative; padding-left: 20px; margin-bottom: 12px; font-size: 14px; color: #555; line-height: 1.4; }
         .info-list li::before { content: "•"; color: var(--primary-orange); position: absolute; left: 0; font-weight: bold; }
@@ -83,16 +84,16 @@
         
         .options-list { display: flex; flex-direction: column; gap: 12px; }
         .option-btn { background: var(--white); border: 1.5px solid #e0e0e0; padding: 16px; border-radius: 10px; text-align: left; font-size: 16px; cursor: pointer; transition: 0.2s; outline: none; }
-        .option-btn:hover { background: #fffaf9; border-color: var(--primary-orange); }
-        .option-btn:active { background: #fdf2ee; }
+        .option-btn:active { background: #fdf2ee; border-color: var(--primary-orange); }
 
         .chart-row { margin-bottom: 15px; text-align: left; }
         .chart-label { font-size: 13px; margin-bottom: 5px; display: flex; justify-content: space-between; font-weight: 600; }
         .chart-bar-bg { background: #eee; height: 16px; border-radius: 8px; }
         .chart-bar-fill { height: 100%; border-radius: 8px; background: var(--primary-orange); width: 0%; transition: width 1s ease-out; }
 
+        .time-label { font-size: 14px; color: var(--medium-gray); margin: 20px 0 30px; }
         .btn-primary { background-color: var(--primary-orange); color: white; border: none; padding: 15px 80px; font-size: 18px; font-weight: 700; border-radius: 35px; cursor: pointer; }
-        .final-note { margin-top: 20px; padding: 15px; border: 1px dashed var(--primary-orange); border-radius: 8px; font-size: 14px; color: var(--primary-orange); font-weight: 600;}
+        .final-note { font-size: 15px; color: var(--primary-orange); font-weight: bold; margin-top: 30px; line-height: 1.5; padding: 15px; border: 1px dashed var(--primary-orange); border-radius: 8px; }
         footer { padding: 20px; font-size: 11px; color: #aaa; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
@@ -110,13 +111,23 @@
             <p class="welcome-text">Let's take a look inside your mind.</p>
 
             <div class="info-box">
+                <h4>Quick Guide:</h4>
                 <ul class="info-list">
                     <li>12 questions based on daily scenarios.</li>
                     <li>30 seconds per question.</li>
-                    <li>Automatic progression on answer.</li>
+                    <li>Tap on your answer to move to the next question.</li>
                 </ul>
             </div>
 
+            <div class="tips-box">
+                <h4>Tips:</h4>
+                <ul class="tips-list">
+                    <li>Go with your first instinct</li>
+                    <li>Be Honest to yourself</li>
+                </ul>
+            </div>
+
+            <p class="time-label">⏱️ <strong>Time Needed:</strong> About 5 minutes</p>
             <button class="btn-primary" onclick="startAssessment()">Let's Go</button>
         </div>
 
@@ -134,7 +145,7 @@
             <p id="type-description" style="line-height:1.6; color:#555; margin-bottom:30px; font-size: 15px;"></p>
             <hr style="border:0; border-top:1px solid #eee; margin: 25px 0;">
             <div id="chart-area"></div>
-            <div class="final-note">Please keep this screen open for the session.</div>
+            <div class="final-note">Please keep this screen open for the presentation. <br> We will be diving deep into them.</div>
         </div>
 
         <footer>Rewire & Rise • myG Learning & Development</footer>
@@ -176,20 +187,16 @@
 
         function loadQuestion() {
             if (currentIdx >= questions.length) { showResults(); return; }
-            
             var qData = questions[currentIdx];
             document.getElementById('question-text').innerText = qData.q;
             document.getElementById('progress-fill').style.width = Math.round((currentIdx / questions.length) * 100) + "%";
-            
             var container = document.getElementById('options-container');
             container.innerHTML = '';
-            
             var keys = ['A', 'B', 'C', 'D'];
             for (let i = keys.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [keys[i], keys[j]] = [keys[j], keys[i]];
             }
-
             keys.forEach(function(key) {
                 var btn = document.createElement('button');
                 btn.className = 'option-btn';
@@ -230,26 +237,17 @@
         function showResults() {
             document.getElementById('assessment-screen').style.display = 'none';
             document.getElementById('results-screen').style.display = 'block';
-            
             var maxScore = Math.max(scores.A, scores.B, scores.C, scores.D);
             var winners = [];
             ['A', 'B', 'C', 'D'].forEach(function(k) { if (scores[k] === maxScore) winners.push(typeInfo[k].name); });
-
             var resultTitle = winners.length === 1 ? "Your dominant personality is " + winners[0] : "Your profile is a mix of " + winners.join(" & ");
-            var resultDesc = winners.length === 1 ? typeInfo[Object.keys(scores).find(k => scores[k] === maxScore)].desc : "You are highly adaptable and exhibit a balanced set of traits.";
-
             document.getElementById('dominant-type').innerText = resultTitle;
-            document.getElementById('type-description').innerText = resultDesc;
-
+            document.getElementById('type-description').innerText = winners.length === 1 ? typeInfo[Object.keys(scores).find(k => scores[k] === maxScore)].desc : "You exhibit a balanced set of traits.";
             var chartArea = document.getElementById('chart-area');
             chartArea.innerHTML = '<h4 style="text-align:left; color:#888; font-size:12px; margin-bottom:20px; letter-spacing:1px;">CHARACTER DISTRIBUTION</h4>';
             ['A','B','C','D'].forEach(function(k) {
                 var pct = (scores[k] / 12) * 100;
-                chartArea.innerHTML += `
-                    <div class="chart-row">
-                        <div class="chart-label"><span>${typeInfo[k].name}</span><span>${scores[k]} pts</span></div>
-                        <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${pct}%"></div></div>
-                    </div>`;
+                chartArea.innerHTML += `<div class="chart-row"><div class="chart-label"><span>${typeInfo[k].name}</span><span>${scores[k]} pts</span></div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${pct}%"></div></div></div>`;
             });
         }
     </script>
