@@ -53,33 +53,73 @@
 
         .content { padding: 30px 25px; text-align: center; }
         
-        .main-title { color: var(--primary-orange); font-size: 28px; font-weight: 800; margin: 10px 0; }
-        .sub-title { color: var(--dark-gray); font-size: 18px; margin-bottom: 20px; font-weight: 600; }
+        .main-title { color: var(--primary-orange); font-size: 32px; font-weight: 800; margin: 10px 0; }
+        .sub-title { color: var(--dark-gray); font-size: 20px; margin-bottom: 20px; font-weight: 600; }
+        .welcome-text { color: var(--medium-gray); line-height: 1.5; margin-bottom: 30px; font-size: 15px; }
+
+        .info-box, .tips-box {
+            background: #F8F9FA;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .info-box { border-left: 4px solid var(--primary-orange); }
+
+        h4 { margin-top: 0; margin-bottom: 15px; color: #333; font-size: 16px; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { position: relative; padding-left: 20px; margin-bottom: 12px; font-size: 14px; color: #555; line-height: 1.4; }
+        .info-list li::before { content: "•"; color: var(--primary-orange); position: absolute; left: 0; font-weight: bold; }
+        .tips-list li::before { content: "✨"; position: absolute; left: 0; }
 
         #assessment-screen, #results-screen { display: none; }
+        
         .progress-bar-bg { background: #eee; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 20px; }
         .progress-bar-fill { background: var(--primary-orange); height: 100%; width: 0%; transition: width 0.3s ease; }
+        
         .timer-circle { display: inline-block; width: 50px; height: 50px; line-height: 50px; border-radius: 50%; font-weight: bold; border: 3px solid var(--timer-green); color: var(--timer-green); font-size: 18px; margin-bottom: 20px; }
         
-        .question-text { font-size: 19px; font-weight: 700; margin-bottom: 25px; line-height: 1.4; color: #222; text-align: left; }
+        #warning-msg { 
+            display: none; 
+            background: #fff3cd; 
+            color: #856404; 
+            padding: 12px; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            font-size: 14px; 
+            border: 1px solid #ffeeba;
+            text-align: left;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        .nudge-pop { animation: shake 0.4s ease-in-out; }
+
+        .question-text { font-size: 20px; font-weight: 700; margin-bottom: 25px; line-height: 1.4; color: #222; text-align: left; }
+        
         .options-list { display: flex; flex-direction: column; gap: 12px; }
-        .option-btn { background: var(--white); border: 1.5px solid #e0e0e0; padding: 16px; border-radius: 10px; text-align: left; font-size: 15px; cursor: pointer; transition: 0.2s; outline: none; }
+        .option-btn { background: var(--white); border: 1.5px solid #e0e0e0; padding: 16px; border-radius: 10px; text-align: left; font-size: 16px; cursor: pointer; transition: 0.2s; outline: none; }
         .option-btn:active { background: #fdf2ee; border-color: var(--primary-orange); }
 
         /* Results Styling */
         .result-card { text-align: left; background: #fffaf8; border: 1px solid #ffece5; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
-        .result-header { color: var(--primary-orange); font-weight: 800; font-size: 22px; margin-bottom: 10px; }
-        .result-section { margin-bottom: 15px; font-size: 14px; }
+        .result-header { color: var(--primary-orange); font-weight: 800; font-size: 24px; margin-bottom: 15px; line-height: 1.2; }
+        .result-section { margin-bottom: 15px; font-size: 15px; color: #555; }
         .result-section strong { color: #333; display: block; margin-bottom: 4px; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
 
-        .chart-row { margin-bottom: 12px; text-align: left; }
-        .chart-label { font-size: 12px; margin-bottom: 4px; display: flex; justify-content: space-between; font-weight: 600; }
-        .chart-bar-bg { background: #eee; height: 12px; border-radius: 6px; }
-        .chart-bar-fill { height: 100%; border-radius: 6px; background: var(--primary-orange); width: 0%; transition: width 1s ease-out; }
+        .chart-row { margin-bottom: 15px; text-align: left; }
+        .chart-label { font-size: 13px; margin-bottom: 5px; display: flex; justify-content: space-between; font-weight: 600; }
+        .chart-bar-bg { background: #eee; height: 16px; border-radius: 8px; }
+        .chart-bar-fill { height: 100%; border-radius: 8px; background: var(--primary-orange); width: 0%; transition: width 1s ease-out; }
 
-        .btn-primary { background-color: var(--primary-orange); color: white; border: none; padding: 15px 80px; font-size: 18px; font-weight: 700; border-radius: 35px; cursor: pointer; }
-        .final-note { font-size: 14px; color: var(--primary-orange); font-weight: bold; margin-top: 25px; padding: 12px; border: 1px dashed var(--primary-orange); border-radius: 8px; line-height: 1.4; }
-        footer { padding: 20px; font-size: 10px; color: #aaa; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-primary { background-color: var(--primary-orange); color: white; border: none; padding: 15px 80px; font-size: 18px; font-weight: 700; border-radius: 35px; cursor: pointer; margin-top: 10px; }
+        .final-note { font-size: 15px; color: var(--primary-orange); font-weight: bold; margin-top: 30px; line-height: 1.5; padding: 15px; border: 1px dashed var(--primary-orange); border-radius: 8px; }
+        footer { padding: 20px; font-size: 11px; color: #aaa; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -91,21 +131,44 @@
         </header>
 
         <div id="intro-screen" class="content">
-            <h1 class="main-title">Identity Box Assessment</h1>
-            <h2 class="sub-title">Rewire & Rise</h2>
-            <p style="color: #666; font-size: 15px; margin-bottom: 30px;">Discover the psychological "boxes" that may be limiting your growth and personal narrative.</p>
-            <button class="btn-primary" onclick="startAssessment()">Start Now</button>
+            <h1 class="main-title">Rewire & Rise</h1>
+            <h2 class="sub-title">Identity Box Assessment</h2>
+            <p class="welcome-text">Discover the psychological "boxes" that may be limiting your growth and personal narrative.</p>
+
+            <div class="info-box">
+                <h4>Quick Guide:</h4>
+                <ul class="info-list">
+                    <li>12 behavioral questions.</li>
+                    <li>30 seconds per question.</li>
+                    <li>Tap on your answer to move to the next question.</li>
+                </ul>
+            </div>
+
+            <div class="tips-box">
+                <h4>Tips:</h4>
+                <ul class="tips-list">
+                    <li>Go with your first instinct</li>
+                    <li>Be Honest to yourself</li>
+                </ul>
+            </div>
+
+            <button class="btn-primary" onclick="startAssessment()">Let's Go</button>
         </div>
 
         <div id="assessment-screen" class="content">
             <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
-            <div id="timer-display" class="timer-circle">25</div>
+            <div id="timer-display" class="timer-circle">30</div>
+            
+            <div id="warning-msg">
+                ✨ <strong>Quick tip!</strong> Follow your first choice.
+            </div>
+
             <div id="question-text" class="question-text"></div>
             <div id="options-container" class="options-list"></div>
         </div>
 
         <div id="results-screen" class="content">
-            <h2 style="margin:0; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Your Dominant Box</h2>
+            <h2 id="result-label" style="margin-top:0; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Your Dominant Box</h2>
             
             <div id="result-container"></div>
 
@@ -114,7 +177,7 @@
             </div>
             
             <div class="final-note">
-                Please keep this screen open for the presentation. We will be diving deep into these quadrants.
+                Please keep this screen open for the presentation. <br> We will be diving deep into these quadrants.
             </div>
         </div>
 
@@ -138,35 +201,15 @@
         ];
 
         var boxData = {
-            A: { 
-                name: "Personality-Based", 
-                belief: "“I am this kind of person — and that’s just who I am.”", 
-                patterns: "Labels like 'I’m shy' or 'not a people person'. Seeing traits as fixed limitations.",
-                growth: "Explore flexibility. View identity as expansive, not restrictive." 
-            },
-            B: { 
-                name: "Ability-Based", 
-                belief: "“I’m just not good at this kind of thing.”", 
-                patterns: "Believing talent is fixed. Avoiding 'hard' tasks. Internalizing early failures.",
-                growth: "Embrace a growth mindset. Skill is separate from identity." 
-            },
-            C: { 
-                name: "Role-Based", 
-                belief: "“This is who I am to others — I can’t change that.”", 
-                patterns: "Feeling trapped in roles like 'the helper' or 'the provider'. Confusing titles with identity.",
-                growth: "Ask: 'Who am I outside this role?' Practice setting boundaries." 
-            },
-            D: { 
-                name: "Belief-Based", 
-                belief: "“My past or experiences prove I’m not enough.”", 
-                patterns: "Fear-driven doubt. Holding on to past rejections. Limiting old stories.",
-                growth: "Challenge old stories. Reclaim the power to rewrite your narrative." 
-            }
+            A: { name: "Personality-Based", belief: "“I am this kind of person — and that’s just who I am.”", patterns: "Labels like 'I’m shy' or 'not a people person'. Seeing traits as fixed limitations.", growth: "Explore flexibility. View identity as expansive, not restrictive." },
+            B: { name: "Ability-Based", belief: "“I’m just not good at this kind of thing.”", patterns: "Believing talent is fixed. Avoiding 'hard' tasks. Internalizing early failures.", growth: "Embrace a growth mindset. Skill is separate from identity." },
+            C: { name: "Role-Based", belief: "“This is who I am to others — I can’t change that.”", patterns: "Feeling trapped in roles like 'the helper' or 'the provider'. Confusing titles with identity.", growth: "Ask: 'Who am I outside this role?' Practice setting boundaries." },
+            D: { name: "Belief-Based", belief: "“My past or experiences prove I’m not enough.”", patterns: "Fear-driven doubt. Holding on to past rejections. Limiting old stories.", growth: "Challenge old stories. Reclaim the power to rewrite your narrative." }
         };
 
         var currentIdx = 0;
         var scores = { A: 0, B: 0, C: 0, D: 0 };
-        var timerValue = 25;
+        var timerValue = 30;
         var timerInterval = null;
 
         function startAssessment() {
@@ -177,6 +220,11 @@
 
         function loadQuestion() {
             if (currentIdx >= questions.length) { showResults(); return; }
+            
+            var warning = document.getElementById('warning-msg');
+            warning.style.display = 'none';
+            warning.classList.remove('nudge-pop');
+
             var qData = questions[currentIdx];
             document.getElementById('question-text').innerText = qData.q;
             document.getElementById('progress-fill').style.width = Math.round((currentIdx / questions.length) * 100) + "%";
@@ -200,18 +248,26 @@
 
         function resetTimer() {
             clearInterval(timerInterval);
-            timerValue = 25; updateTimerUI();
+            timerValue = 30; 
+            updateTimerUI();
             timerInterval = setInterval(function() {
-                timerValue--; updateTimerUI();
-                if (timerValue < 0) selectOption(Object.keys(scores)[Math.floor(Math.random()*4)]); // Auto-skip on timeout
+                timerValue--;
+                updateTimerUI();
+                if (timerValue <= 0) { 
+                    clearInterval(timerInterval); 
+                    var msg = document.getElementById('warning-msg');
+                    msg.style.display = 'block';
+                    msg.classList.add('nudge-pop');
+                }
             }, 1000);
         }
 
         function updateTimerUI() {
             var el = document.getElementById('timer-display');
-            el.innerText = timerValue < 0 ? 0 : timerValue;
-            if (timerValue > 15) el.style.borderColor = el.style.color = 'var(--timer-green)';
-            else if (timerValue > 5) el.style.borderColor = el.style.color = 'var(--timer-yellow)';
+            var val = timerValue < 0 ? 0 : timerValue;
+            el.innerText = val;
+            if (timerValue > 20) el.style.borderColor = el.style.color = 'var(--timer-green)';
+            else if (timerValue > 10) el.style.borderColor = el.style.color = 'var(--timer-yellow)';
             else el.style.borderColor = el.style.color = 'var(--timer-red)';
         }
 
@@ -230,9 +286,10 @@
             var winnerKeys = Object.keys(scores).filter(k => scores[k] === maxScore);
             var resultContainer = document.getElementById('result-container');
 
-            winnerKeys.forEach(k => {
+            if (winnerKeys.length === 1) {
+                var k = winnerKeys[0];
                 var data = boxData[k];
-                resultContainer.innerHTML += `
+                resultContainer.innerHTML = `
                     <div class="result-card">
                         <div class="result-header">${data.name} Box</div>
                         <div class="result-section"><strong>Core Belief</strong>${data.belief}</div>
@@ -240,7 +297,19 @@
                         <div class="result-section"><strong>Growth Path</strong>${data.growth}</div>
                     </div>
                 `;
-            });
+            } else {
+                // Grammatical Join and Fallback Description
+                var winnerNames = winnerKeys.map(k => boxData[k].name);
+                var lastWinner = winnerNames.pop();
+                var combinedTitle = "A mix of " + winnerNames.join(", ") + " & " + lastWinner;
+                
+                resultContainer.innerHTML = `
+                    <div class="result-card">
+                        <div class="result-header">${combinedTitle}</div>
+                        <div class="result-section">You have a versatile profile, exhibiting a blend of different identity boxes depending on the situation!</div>
+                    </div>
+                `;
+            }
 
             var chartArea = document.getElementById('chart-area');
             ['A','B','C','D'].forEach(k => {
