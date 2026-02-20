@@ -259,12 +259,28 @@
         function showResults() {
             document.getElementById('assessment-screen').style.display = 'none';
             document.getElementById('results-screen').style.display = 'block';
+            
             var maxScore = Math.max(scores.A, scores.B, scores.C, scores.D);
             var winners = [];
-            ['A', 'B', 'C', 'D'].forEach(function(k) { if (scores[k] === maxScore) winners.push(typeInfo[k].name); });
-            var resultTitle = winners.length === 1 ? "Your dominant personality is " + winners[0] : "Your profile is a mix of " + winners.join(" & ");
+            ['A', 'B', 'C', 'D'].forEach(function(k) { 
+                if (scores[k] === maxScore) winners.push(typeInfo[k].name); 
+            });
+
+            // Garmmar-safe Result Title
+            var resultTitle;
+            if (winners.length === 1) {
+                resultTitle = "Your dominant personality is " + winners[0];
+            } else {
+                var lastWinner = winners.pop();
+                resultTitle = "Your profile is a mix of " + winners.join(", ") + " & " + lastWinner;
+            }
             document.getElementById('dominant-type').innerText = resultTitle;
-            document.getElementById('type-description').innerText = winners.length === 1 ? typeInfo[Object.keys(scores).find(k => scores[k] === maxScore)].desc : "You exhibit a balanced set of traits.";
+
+            // Updated Multi-Type Description
+            document.getElementById('type-description').innerText = winners.length === 0 ? // winners.length was modified by pop()
+                typeInfo[Object.keys(scores).find(k => scores[k] === maxScore)].desc : 
+                "You have a versatile profile, allowing you to adapt your approach depending on the situation!";
+
             var chartArea = document.getElementById('chart-area');
             chartArea.innerHTML = '<h4 style="text-align:left; color:#888; font-size:12px; margin-bottom:20px; letter-spacing:1px;">CHARACTER DISTRIBUTION</h4>';
             ['A','B','C','D'].forEach(function(k) {
