@@ -57,7 +57,6 @@
         .sub-title { color: var(--dark-gray); font-size: 20px; margin-bottom: 20px; font-weight: 600; }
         .welcome-text { color: var(--medium-gray); line-height: 1.5; margin-bottom: 30px; font-size: 15px; }
 
-        /* Restoring your original box styles */
         .info-box, .tips-box {
             background: #F8F9FA;
             border-radius: 8px;
@@ -134,7 +133,7 @@
         <div id="assessment-screen" class="content">
             <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
             <div id="timer-display" class="timer-circle">30</div>
-            <div id="warning-msg" style="display:none; background:#fff3cd; color:#856404; padding:10px; border-radius:8px; margin-bottom:10px;">✨ <strong>Instinct Check!</strong></div>
+            <div id="warning-msg" style="display:none; background:#fff3cd; color:#856404; padding:10px; border-radius:8px; margin-bottom:15px; font-size: 14px; border: 1px solid #ffeeba;">✨ <strong>Instinct Check!</strong> Pick the first one that fits!</div>
             <div id="question-text" class="question-text"></div>
             <div id="options-container" class="options-list"></div>
         </div>
@@ -187,6 +186,10 @@
 
         function loadQuestion() {
             if (currentIdx >= questions.length) { showResults(); return; }
+            
+            // Hide warning message on new question
+            document.getElementById('warning-msg').style.display = 'none';
+
             var qData = questions[currentIdx];
             document.getElementById('question-text').innerText = qData.q;
             document.getElementById('progress-fill').style.width = Math.round((currentIdx / questions.length) * 100) + "%";
@@ -214,7 +217,11 @@
             timerInterval = setInterval(function() {
                 timerValue--;
                 updateTimerUI();
-                if (timerValue <= 0) { clearInterval(timerInterval); }
+                if (timerValue <= 0) { 
+                    clearInterval(timerInterval); 
+                    // Show the pop up only when time hits zero
+                    document.getElementById('warning-msg').style.display = 'block';
+                }
             }, 1000);
         }
 
