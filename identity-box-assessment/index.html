@@ -106,11 +106,9 @@
         .option-btn { background: var(--white); border: 1.5px solid #e0e0e0; padding: 16px; border-radius: 10px; text-align: left; font-size: 16px; cursor: pointer; transition: 0.2s; outline: none; }
         .option-btn:active { background: #fdf2ee; border-color: var(--primary-orange); }
 
-        /* Results Styling */
         .result-card { text-align: left; background: #fffaf8; border: 1px solid #ffece5; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
         .result-header { color: var(--primary-orange); font-weight: 800; font-size: 24px; margin-bottom: 15px; line-height: 1.2; }
-        .result-section { margin-bottom: 15px; font-size: 15px; color: #555; }
-        .result-section strong { color: #333; display: block; margin-bottom: 4px; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+        .result-description { font-size: 16px; color: #555; line-height: 1.6; }
 
         .chart-row { margin-bottom: 15px; text-align: left; }
         .chart-label { font-size: 13px; margin-bottom: 5px; display: flex; justify-content: space-between; font-weight: 600; }
@@ -131,8 +129,8 @@
         </header>
 
         <div id="intro-screen" class="content">
-            <h1 class="main-title">Rewire & Rise</h1>
-            <h2 class="sub-title">Identity Box Assessment</h2>
+            <h1 class="main-title">Identity Box</h1>
+            <h2 class="sub-title">Rewire & Rise</h2>
             <p class="welcome-text">Discover the psychological "boxes" that may be limiting your growth and personal narrative.</p>
 
             <div class="info-box">
@@ -200,11 +198,18 @@
             { q: "When you feel stuck, you usually believe it's because...", options: { A: "This is just how I'm wired as a person", B: "I don't have the right skills or intelligence to move forward", C: "I'm needed where I am — others depend on me", D: "My past patterns and experiences keep repeating" } }
         ];
 
-        var boxData = {
-            A: { name: "Personality-Based", belief: "“I am this kind of person — and that’s just who I am.”", patterns: "Labels like 'I’m shy' or 'not a people person'. Seeing traits as fixed limitations.", growth: "Explore flexibility. View identity as expansive, not restrictive." },
-            B: { name: "Ability-Based", belief: "“I’m just not good at this kind of thing.”", patterns: "Believing talent is fixed. Avoiding 'hard' tasks. Internalizing early failures.", growth: "Embrace a growth mindset. Skill is separate from identity." },
-            C: { name: "Role-Based", belief: "“This is who I am to others — I can’t change that.”", patterns: "Feeling trapped in roles like 'the helper' or 'the provider'. Confusing titles with identity.", growth: "Ask: 'Who am I outside this role?' Practice setting boundaries." },
-            D: { name: "Belief-Based", belief: "“My past or experiences prove I’m not enough.”", patterns: "Fear-driven doubt. Holding on to past rejections. Limiting old stories.", growth: "Challenge old stories. Reclaim the power to rewrite your narrative." }
+        var typeNames = {
+            A: "Personality-Based Box",
+            B: "Ability-Based Box",
+            C: "Role-Based Box",
+            D: "Belief-Based Box"
+        };
+        
+        var descriptions = {
+            A: "You tend to see your personality as fixed and rarely step outside what feels comfortable.",
+            B: "You tend to link worth to natural talent, stepping back when things feel too hard.",
+            C: "You tend to define yourself through others, leaving little room to explore who else you could be.",
+            D: "You tend to let the past write your future, carrying old stories that may no longer be true."
         };
 
         var currentIdx = 0;
@@ -286,37 +291,32 @@
             var winnerKeys = Object.keys(scores).filter(k => scores[k] === maxScore);
             var resultContainer = document.getElementById('result-container');
 
+            let finalTitle = "";
+            let finalDesc = "";
+
             if (winnerKeys.length === 1) {
-                var k = winnerKeys[0];
-                var data = boxData[k];
-                resultContainer.innerHTML = `
-                    <div class="result-card">
-                        <div class="result-header">${data.name} Box</div>
-                        <div class="result-section"><strong>Core Belief</strong>${data.belief}</div>
-                        <div class="result-section"><strong>Patterns</strong>${data.patterns}</div>
-                        <div class="result-section"><strong>Growth Path</strong>${data.growth}</div>
-                    </div>
-                `;
+                finalTitle = typeNames[winnerKeys[0]];
+                finalDesc = descriptions[winnerKeys[0]];
             } else {
-                // Grammatical Join and Fallback Description
-                var winnerNames = winnerKeys.map(k => boxData[k].name);
-                var lastWinner = winnerNames.pop();
-                var combinedTitle = "A mix of " + winnerNames.join(", ") + " & " + lastWinner;
-                
-                resultContainer.innerHTML = `
-                    <div class="result-card">
-                        <div class="result-header">${combinedTitle}</div>
-                        <div class="result-section">You have a versatile profile, exhibiting a blend of different identity boxes depending on the situation!</div>
-                    </div>
-                `;
+                var winnerLabels = winnerKeys.map(k => typeNames[k]);
+                var lastLabel = winnerLabels.pop();
+                finalTitle = "A blend of " + winnerLabels.join(", ") + " & " + lastLabel;
+                finalDesc = "You carry a blend of limiting patterns, each pointing to a different layer of growth.";
             }
+
+            resultContainer.innerHTML = `
+                <div class="result-card">
+                    <div class="result-header">${finalTitle}</div>
+                    <div class="result-description">${finalDesc}</div>
+                </div>
+            `;
 
             var chartArea = document.getElementById('chart-area');
             ['A','B','C','D'].forEach(k => {
                 var pct = (scores[k] / 12) * 100;
                 chartArea.innerHTML += `
                     <div class="chart-row">
-                        <div class="chart-label"><span>${boxData[k].name}</span><span>${scores[k]} pts</span></div>
+                        <div class="chart-label"><span>${typeNames[k]}</span><span>${scores[k]} pts</span></div>
                         <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${pct}%"></div></div>
                     </div>`;
             });
