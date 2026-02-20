@@ -7,7 +7,6 @@
     
     <style>
         :root {
-            /* These are "Variables" - we define colors here once so we can reuse them easily */
             --primary-orange: #E95B23;
             --dark-gray: #4A4A4A;
             --medium-gray: #666666;
@@ -19,7 +18,6 @@
             --timer-red: #dc3545;
         }
 
-        /* Basic reset to make sure everything fits perfectly */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
@@ -33,7 +31,6 @@
             min-height: 100vh;
         }
 
-        /* The white box that holds all the content */
         .container {
             width: 95%;
             max-width: 550px;
@@ -46,7 +43,6 @@
             flex-direction: column;
         }
 
-        /* The top part with the logo */
         header {
             padding: 25px 20px;
             text-align: center;
@@ -56,14 +52,12 @@
         .logo-myg { color: var(--primary-orange); font-weight: 800; font-size: 24px; margin: 0; }
         .logo-sub { color: var(--medium-gray); font-size: 11px; font-weight: 600; letter-spacing: 1.5px; margin-top: 4px; text-transform: uppercase; }
 
-        /* The main padding for the text inside the box */
         .content { padding: 30px 25px; text-align: center; }
         
         .main-title { color: var(--primary-orange); font-size: 32px; font-weight: 800; margin: 10px 0; }
         .sub-title { color: var(--dark-gray); font-size: 20px; margin-bottom: 20px; font-weight: 600; }
         .welcome-text { color: var(--medium-gray); line-height: 1.5; margin-bottom: 30px; font-size: 15px; }
 
-        /* Styling for the instruction boxes on the first screen */
         .info-box, .tips-box {
             background: #F8F9FA;
             border-radius: 8px;
@@ -73,39 +67,32 @@
         }
         .info-box { border-left: 4px solid var(--primary-orange); }
 
-        /* List styling (bullet points) */
         ul { list-style: none; padding: 0; margin: 0; }
         li { position: relative; padding-left: 20px; margin-bottom: 12px; font-size: 14px; color: #555; line-height: 1.4; }
         .info-list li::before { content: "•"; color: var(--primary-orange); position: absolute; left: 0; font-weight: bold; }
         .tips-list li::before { content: "✨"; position: absolute; left: 0; }
 
-        /* IMPORTANT: We hide the Assessment and Results screens by default using "display: none" */
         #assessment-screen, #results-screen { display: none; }
         
-        /* Progress bar at the top of the quiz */
         .progress-bar-bg { background: #eee; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 20px; }
         .progress-bar-fill { background: var(--primary-orange); height: 100%; width: 0%; transition: width 0.3s ease; }
         
-        /* The circular countdown timer */
         .timer-circle { display: inline-block; width: 50px; height: 50px; line-height: 50px; border-radius: 50%; font-weight: bold; border: 3px solid var(--timer-green); color: var(--timer-green); font-size: 18px; margin-bottom: 20px; }
         
-        /* The quiz question text */
         .question-text { font-size: 20px; font-weight: 700; margin-bottom: 25px; line-height: 1.4; color: #222; text-align: left; }
         
-        /* The answer buttons */
         .options-list { display: flex; flex-direction: column; gap: 12px; }
         .option-btn { background: var(--white); border: 1.5px solid #e0e0e0; padding: 16px; border-radius: 10px; text-align: left; font-size: 16px; cursor: pointer; transition: 0.2s; outline: none; }
-        /* Makes the button change color when you tap it */
-        .option-btn:active { background: #fdf2ee; border-color: var(--primary-orange); }
+        .option-btn:hover { background: #fffaf9; border-color: var(--primary-orange); }
+        .option-btn:active { background: #fdf2ee; }
 
-        /* Horizontal bars on the final result chart */
         .chart-row { margin-bottom: 15px; text-align: left; }
         .chart-label { font-size: 13px; margin-bottom: 5px; display: flex; justify-content: space-between; font-weight: 600; }
         .chart-bar-bg { background: #eee; height: 16px; border-radius: 8px; }
         .chart-bar-fill { height: 100%; border-radius: 8px; background: var(--primary-orange); width: 0%; transition: width 1s ease-out; }
 
-        /* The main "Let's Go" button */
         .btn-primary { background-color: var(--primary-orange); color: white; border: none; padding: 15px 80px; font-size: 18px; font-weight: 700; border-radius: 35px; cursor: pointer; }
+        .final-note { margin-top: 20px; padding: 15px; border: 1px dashed var(--primary-orange); border-radius: 8px; font-size: 14px; color: var(--primary-orange); font-weight: 600;}
         footer { padding: 20px; font-size: 11px; color: #aaa; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
@@ -120,34 +107,23 @@
         <div id="intro-screen" class="content">
             <h1 class="main-title">Rewire & Rise</h1>
             <h2 class="sub-title">Personality Trait Assessment</h2>
-            <p class="welcome-text">Lets take a look inside your mind.</p>
+            <p class="welcome-text">Let's take a look inside your mind.</p>
 
             <div class="info-box">
-                <h4>Quick Guide:</h4>
                 <ul class="info-list">
                     <li>12 questions based on daily scenarios.</li>
-                    <li>25 seconds per question.</li>
-                    <li>Tap your answer to automatically move to the next question.</li>
+                    <li>30 seconds per question.</li>
+                    <li>Automatic progression on answer.</li>
                 </ul>
             </div>
-
-            <div class="tips-box">
-                <h4>Tips:</h4>
-                <ul class="tips-list">
-                    <li>Go with your first instinct</li>
-                    <li>Be Honest to yourself</li>
-                </ul>
-            </div>
-
-            <p class="time-label">⏱️ <strong>Time Needed:</strong> About 5 minutes</p>
 
             <button class="btn-primary" onclick="startAssessment()">Let's Go</button>
         </div>
 
         <div id="assessment-screen" class="content">
             <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
-            <div id="timer-display" class="timer-circle">25</div>
-            <div id="warning-msg" style="display:none; background:#fff3cd; color:#856404; padding:10px; border-radius:8px; margin-bottom:10px;">✨ <strong>Instinct Check!</strong> Pick the first one that fits!</div>
+            <div id="timer-display" class="timer-circle">30</div>
+            <div id="warning-msg" style="display:none; background:#fff3cd; color:#856404; padding:10px; border-radius:8px; margin-bottom:10px;">✨ <strong>Instinct Check!</strong></div>
             <div id="question-text" class="question-text"></div>
             <div id="options-container" class="options-list"></div>
         </div>
@@ -156,21 +132,15 @@
             <h2 style="margin-top:0; font-size: 18px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Your Profile</h2>
             <div id="dominant-type" style="color:var(--primary-orange); font-size:24px; font-weight:800; margin-bottom:15px; line-height: 1.3;"></div>
             <p id="type-description" style="line-height:1.6; color:#555; margin-bottom:30px; font-size: 15px;"></p>
-            
             <hr style="border:0; border-top:1px solid #eee; margin: 25px 0;">
             <div id="chart-area"></div>
-            
-            <div class="final-note">
-                Please keep this screen open for the presentation. <br>
-                We will be diving deep into them.
-            </div>
+            <div class="final-note">Please keep this screen open for the session.</div>
         </div>
 
         <footer>Rewire & Rise • myG Learning & Development</footer>
     </div>
 
     <script>
-        // DATA: All the questions and answer options
         var questions = [
             { q: "When you wake up in the morning, you usually...", options: { A: "Follow your regular routine", B: "Think about what you want to accomplish", C: "Plan carefully for the day", D: "Feel open to whatever the day brings" } },
             { q: "A family member suggests changing plans. You...", options: { A: "Go along to keep peace", B: "Decide if it helps your goals", C: "Ask questions to understand why", D: "Feel excited about the change" } },
@@ -186,7 +156,6 @@
             { q: "People who know you well would say you are...", options: { A: "Steady and caring", B: "Driven and focused", C: "Thoughtful and careful", D: "Open-minded and curious" } }
         ];
 
-        // DATA: The names and descriptions for the final results
         var typeInfo = {
             A: { name: "The Grounded Harmonizer", desc: "You value stability, empathy, and consistency. You are often the 'glue' that holds a team together." },
             B: { name: "The Forward Mover", desc: "You are driven by action and achievement. You serve as the 'engine' of progress in your environment." },
@@ -194,41 +163,33 @@
             D: { name: "The Curious Seeker", desc: "You thrive on intuition and exploration. You are the 'scout' for new ideas and possibilities." }
         };
 
-        // TRACKERS: These variables change as the user takes the quiz
-        var currentIdx = 0; // Which question are we on?
-        var scores = { A: 0, B: 0, C: 0, D: 0 }; // How many times did they pick A, B, C, or D?
-        var timerValue = 25; // Seconds remaining
-        var timerInterval = null; // The "clock" mechanism
+        var currentIdx = 0;
+        var scores = { A: 0, B: 0, C: 0, D: 0 };
+        var timerValue = 30;
+        var timerInterval = null;
 
-        // FUNCTION: Starts the quiz by switching screens
         function startAssessment() {
             document.getElementById('intro-screen').style.display = 'none';
             document.getElementById('assessment-screen').style.display = 'block';
             loadQuestion();
         }
 
-        // FUNCTION: Displays the current question and the 4 options
         function loadQuestion() {
-            // If we run out of questions, show the results
             if (currentIdx >= questions.length) { showResults(); return; }
             
             var qData = questions[currentIdx];
             document.getElementById('question-text').innerText = qData.q;
-            
-            // Update the progress bar percentage
             document.getElementById('progress-fill').style.width = Math.round((currentIdx / questions.length) * 100) + "%";
             
             var container = document.getElementById('options-container');
-            container.innerHTML = ''; // Clear the previous buttons
+            container.innerHTML = '';
             
-            // This small section randomizes the order of A, B, C, D so users don't see a pattern
             var keys = ['A', 'B', 'C', 'D'];
             for (let i = keys.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [keys[i], keys[j]] = [keys[j], keys[i]];
             }
 
-            // Create a button for each option
             keys.forEach(function(key) {
                 var btn = document.createElement('button');
                 btn.className = 'option-btn';
@@ -236,68 +197,50 @@
                 btn.onclick = function() { selectOption(key); };
                 container.appendChild(btn);
             });
-            resetTimer(); // Start the 25-second clock
+            resetTimer();
         }
 
-        // FUNCTION: Manages the countdown clock
         function resetTimer() {
             clearInterval(timerInterval);
-            timerValue = 25; 
+            timerValue = 30; 
             updateTimerUI();
             timerInterval = setInterval(function() {
                 timerValue--;
                 updateTimerUI();
-                // If time runs out, it just stops at 0 (you could make it auto-skip here if desired)
                 if (timerValue <= 0) { clearInterval(timerInterval); }
             }, 1000);
         }
 
-        // FUNCTION: Updates the visual look of the timer (Green -> Yellow -> Red)
         function updateTimerUI() {
             var el = document.getElementById('timer-display');
             var val = timerValue < 0 ? 0 : timerValue;
             el.innerText = val;
-            if (timerValue > 15) el.style.borderColor = el.style.color = 'var(--timer-green)';
-            else if (timerValue > 5) el.style.borderColor = el.style.color = 'var(--timer-yellow)';
+            if (timerValue > 20) el.style.borderColor = el.style.color = 'var(--timer-green)';
+            else if (timerValue > 10) el.style.borderColor = el.style.color = 'var(--timer-yellow)';
             else el.style.borderColor = el.style.color = 'var(--timer-red)';
         }
 
-        // FUNCTION: Runs when a user clicks an answer
         function selectOption(key) {
-            scores[key]++; // Add 1 point to the chosen category
-            clearInterval(timerInterval); // Stop the clock
-            currentIdx++; // Go to next question
-            loadQuestion(); // Reload the screen
+            scores[key]++;
+            clearInterval(timerInterval);
+            currentIdx++;
+            loadQuestion();
         }
 
-        // FUNCTION: Calculates and shows the final profile
         function showResults() {
             document.getElementById('assessment-screen').style.display = 'none';
             document.getElementById('results-screen').style.display = 'block';
             
-            // Find the highest score
             var maxScore = Math.max(scores.A, scores.B, scores.C, scores.D);
             var winners = [];
             ['A', 'B', 'C', 'D'].forEach(function(k) { if (scores[k] === maxScore) winners.push(typeInfo[k].name); });
 
-            var resultTitle = "";
-            var resultDesc = "";
-
-            // Handle Ties vs Single Winners
-            if (winners.length === 1) {
-                resultTitle = "Your dominant personality is " + winners[0];
-                var winKey = Object.keys(scores).find(key => scores[key] === maxScore);
-                resultDesc = typeInfo[winKey].desc;
-            } else {
-                var last = winners.pop();
-                resultTitle = "Your dominant personality is a combination of " + winners.join(", ") + " and " + last;
-                resultDesc = "You exhibit a balanced mix of these traits, giving you the versatility to adapt to different situations effectively.";
-            }
+            var resultTitle = winners.length === 1 ? "Your dominant personality is " + winners[0] : "Your profile is a mix of " + winners.join(" & ");
+            var resultDesc = winners.length === 1 ? typeInfo[Object.keys(scores).find(k => scores[k] === maxScore)].desc : "You are highly adaptable and exhibit a balanced set of traits.";
 
             document.getElementById('dominant-type').innerText = resultTitle;
             document.getElementById('type-description').innerText = resultDesc;
 
-            // Generate the horizontal bar chart
             var chartArea = document.getElementById('chart-area');
             chartArea.innerHTML = '<h4 style="text-align:left; color:#888; font-size:12px; margin-bottom:20px; letter-spacing:1px;">CHARACTER DISTRIBUTION</h4>';
             ['A','B','C','D'].forEach(function(k) {
