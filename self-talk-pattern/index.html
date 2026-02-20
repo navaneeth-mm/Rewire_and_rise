@@ -76,7 +76,28 @@
         .progress-bar-bg { background: #eee; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 20px; }
         .progress-bar-fill { background: var(--primary-orange); height: 100%; width: 0%; transition: width 0.3s ease; }
         .timer-circle { display: inline-block; width: 50px; height: 50px; line-height: 50px; border-radius: 50%; font-weight: bold; border: 3px solid var(--timer-green); color: var(--timer-green); font-size: 18px; margin-bottom: 20px; }
-        #warning-msg { display: none; background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; border-left: 4px solid #ffeeba; text-align: left; }
+        
+        #warning-msg { 
+            display: none; 
+            background: #fff3cd; 
+            color: #856404; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            font-size: 14px; 
+            border: 1px solid #ffeeba;
+            text-align: left; 
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        .nudge-pop { animation: shake 0.4s ease-in-out; }
+
         .question-text { font-size: 19px; font-weight: 700; margin-bottom: 25px; line-height: 1.4; color: #222; text-align: left; }
         .options-list { display: flex; flex-direction: column; gap: 12px; }
         .option-btn { background: var(--white); border: 1.5px solid #e0e0e0; padding: 16px; border-radius: 10px; text-align: left; font-size: 15px; cursor: pointer; transition: 0.2s; outline: none; }
@@ -193,7 +214,11 @@
 
         function loadQuestion() {
             if (currentIdx >= questions.length) { showResults(); return; }
-            document.getElementById('warning-msg').style.display = 'none';
+            
+            var warning = document.getElementById('warning-msg');
+            warning.style.display = 'none';
+            warning.classList.remove('nudge-pop');
+
             var qData = questions[currentIdx];
             document.getElementById('question-text').innerText = qData.q;
             document.getElementById('progress-fill').style.width = Math.round((currentIdx / questions.length) * 100) + "%";
@@ -217,11 +242,17 @@
 
         function resetTimer() {
             clearInterval(timerInterval);
-            timerValue = 25; updateTimerUI();
+            timerValue = 25; 
+            updateTimerUI();
             timerInterval = setInterval(function() {
                 timerValue--;
-                if (timerValue <= -5) document.getElementById('warning-msg').style.display = 'block';
                 updateTimerUI();
+                if (timerValue <= 0) { 
+                    clearInterval(timerInterval); 
+                    var msg = document.getElementById('warning-msg');
+                    msg.style.display = 'block';
+                    msg.classList.add('nudge-pop');
+                }
             }, 1000);
         }
 
@@ -259,16 +290,17 @@
                 finalDesc = descriptions[winners[0]];
             } else if (winners.length === 2) {
                 label = "Dual Pattern";
-                finalTitle = winners[0] + " + " + winners[1];
-                finalDesc = descriptions[finalTitle] || "You balance multiple self-talk modes effectively.";
+                finalTitle = winners[0] + " & " + winners[1];
+                finalDesc = descriptions[winners[0] + " + " + winners[1]] || "You balance multiple self-talk modes effectively.";
             } else if (winners.length === 3) {
                 label = "Multi-Pattern";
-                finalTitle = winners.join(" / ");
-                finalDesc = "Your inner voice shifts between " + winners[0].toLowerCase() + ", " + winners[1].toLowerCase() + ", and " + winners[2].toLowerCase() + " tones. You have a flexible but complex self-talk landscape that adapts to different situations.";
+                var last = winners.pop();
+                finalTitle = winners.join(", ") + " & " + last;
+                finalDesc = "Your inner voice shifts between " + winners.join(", ").toLowerCase() + " and " + last.toLowerCase() + " tones. You have a flexible but complex self-talk landscape.";
             } else {
                 label = "Balanced Pattern";
-                finalTitle = "Balanced";
-                finalDesc = "You engage all four self-talk modes—encouraging, neutral, critical, and anxious—relatively equally. This suggests strong adaptability, though your inner voice may shift significantly based on context.";
+                finalTitle = "Balanced Versatility";
+                finalDesc = "You engage all four self-talk modes—encouraging, neutral, critical, and anxious—equally. This suggests high mental adaptability to different life contexts.";
             }
 
             document.getElementById('result-label').innerText = label;
@@ -276,7 +308,7 @@
             document.getElementById('type-description').innerText = finalDesc;
 
             var chartArea = document.getElementById('chart-area');
-            chartArea.innerHTML = '';
+            chartArea.innerHTML = '<h4 style="text-align:left; color:#888; font-size:12px; margin-bottom:20px; letter-spacing:1px;">PATTERN DISTRIBUTION</h4>';
             ['A','B','C','D'].forEach(function(k) {
                 var pct = (scores[k] / 12) * 100;
                 chartArea.innerHTML += `
