@@ -134,7 +134,7 @@
                 <h4>Quick Guide:</h4>
                 <ul class="info-list">
                     <li>12 mental scenarios.</li>
-                    <li>25 seconds per question.</li>
+                    <li>30 seconds per question.</li>
                     <li>Tap on your answer to move to the next question.</li>
                 </ul>
             </div>
@@ -153,10 +153,10 @@
 
         <div id="assessment-screen" class="content">
             <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
-            <div id="timer-display" class="timer-circle">25</div>
+            <div id="timer-display" class="timer-circle">30</div>
             
             <div id="warning-msg">
-                ✨ <strong>First instinct!</strong> Go with your gut feeling!
+                ✨ <strong>Quick tip!</strong> Follow your first choice.
             </div>
 
             <div id="question-text" class="question-text"></div>
@@ -202,7 +202,7 @@
 
         var currentIdx = 0;
         var scores = { A: 0, B: 0, C: 0, D: 0 };
-        var timerValue = 25;
+        var timerValue = 30;
         var timerInterval = null;
 
         function startAssessment() {
@@ -240,7 +240,7 @@
 
         function resetTimer() {
             clearInterval(timerInterval);
-            timerValue = 25; 
+            timerValue = 30; 
             updateTimerUI();
             timerInterval = setInterval(function() {
                 timerValue--;
@@ -258,8 +258,8 @@
             var el = document.getElementById('timer-display');
             var val = timerValue < 0 ? 0 : timerValue;
             el.innerText = val;
-            if (timerValue > 15) el.style.borderColor = el.style.color = 'var(--timer-green)';
-            else if (timerValue > 5) el.style.borderColor = el.style.color = 'var(--timer-yellow)';
+            if (timerValue > 20) el.style.borderColor = el.style.color = 'var(--timer-green)';
+            else if (timerValue > 10) el.style.borderColor = el.style.color = 'var(--timer-yellow)';
             else el.style.borderColor = el.style.color = 'var(--timer-red)';
         }
 
@@ -279,21 +279,20 @@
             ['A', 'B', 'C', 'D'].forEach(function(k) { if (scores[k] === maxScore) winners.push(typeNames[k]); });
 
             var resultTitle;
-            var resultDesc;
-
             if (winners.length === 1) {
                 document.getElementById('result-label').innerText = "Dominant Pattern";
-                resultTitle = winners[0];
-                resultDesc = descriptions[winners[0]];
+                resultTitle = "Your dominant pattern is " + winners[0];
             } else {
                 document.getElementById('result-label').innerText = "Your Pattern";
                 var lastWinner = winners.pop();
-                resultTitle = "A mix of " + winners.join(", ") + " & " + lastWinner;
-                resultDesc = "You have a versatile profile, allowing you to adapt your inner voice depending on the situation!";
+                resultTitle = "Your profile is a mix of " + winners.join(", ") + " & " + lastWinner;
             }
-
             document.getElementById('dominant-type').innerText = resultTitle;
-            document.getElementById('type-description').innerText = resultDesc;
+
+            // Updated Multi-Type Description Logic
+            document.getElementById('type-description').innerText = winners.length === 0 ? 
+                descriptions[Object.keys(scores).find(k => scores[k] === maxScore)] : 
+                "You have a versatile profile, allowing you to adapt your approach depending on the situation!";
 
             var chartArea = document.getElementById('chart-area');
             chartArea.innerHTML = '<h4 style="text-align:left; color:#888; font-size:12px; margin-bottom:20px; letter-spacing:1px;">PATTERN DISTRIBUTION</h4>';
