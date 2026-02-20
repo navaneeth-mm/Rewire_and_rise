@@ -85,6 +85,16 @@
         .option-btn { background: var(--white); border: 1.5px solid #e0e0e0; padding: 16px; border-radius: 10px; text-align: left; font-size: 16px; cursor: pointer; transition: 0.2s; outline: none; }
         .option-btn:active { background: #fdf2ee; border-color: var(--primary-orange); }
 
+        /* Animation for the warning pop-up */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        .nudge-pop { animation: shake 0.4s ease-in-out; }
+
         .chart-row { margin-bottom: 15px; text-align: left; }
         .chart-label { font-size: 13px; margin-bottom: 5px; display: flex; justify-content: space-between; font-weight: 600; }
         .chart-bar-bg { background: #eee; height: 16px; border-radius: 8px; }
@@ -133,7 +143,11 @@
         <div id="assessment-screen" class="content">
             <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
             <div id="timer-display" class="timer-circle">30</div>
-            <div id="warning-msg" style="display:none; background:#fff3cd; color:#856404; padding:10px; border-radius:8px; margin-bottom:15px; font-size: 14px; border: 1px solid #ffeeba;">✨ <strong>Instinct Check!</strong> Pick the first one that fits!</div>
+            
+            <div id="warning-msg" style="display:none; background:#fff3cd; color:#856404; padding:12px; border-radius:8px; margin-bottom:15px; font-size: 14px; border: 1px solid #ffeeba;">
+                ✨ <strong>Trust yourself!</strong> Follow your first choice.
+            </div>
+
             <div id="question-text" class="question-text"></div>
             <div id="options-container" class="options-list"></div>
         </div>
@@ -187,8 +201,9 @@
         function loadQuestion() {
             if (currentIdx >= questions.length) { showResults(); return; }
             
-            // Hide warning message on new question
-            document.getElementById('warning-msg').style.display = 'none';
+            var warning = document.getElementById('warning-msg');
+            warning.style.display = 'none';
+            warning.classList.remove('nudge-pop');
 
             var qData = questions[currentIdx];
             document.getElementById('question-text').innerText = qData.q;
@@ -219,8 +234,9 @@
                 updateTimerUI();
                 if (timerValue <= 0) { 
                     clearInterval(timerInterval); 
-                    // Show the pop up only when time hits zero
-                    document.getElementById('warning-msg').style.display = 'block';
+                    var msg = document.getElementById('warning-msg');
+                    msg.style.display = 'block';
+                    msg.classList.add('nudge-pop');
                 }
             }, 1000);
         }
