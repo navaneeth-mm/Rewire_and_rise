@@ -194,10 +194,10 @@
         var typeNames = { A: "Encouraging", B: "Neutral", C: "Critical", D: "Anxious" };
         
         var descriptions = {
-            "Encouraging": "Your self-talk is primarily supportive and growth-oriented. This means you tend to bounce back from setbacks and approach challenges with optimism.",
-            "Neutral": "Your self-talk is primarily calm and objective. This means you tend to stay grounded and navigate uncertainty without emotional overwhelm.",
-            "Critical": "Your self-talk is primarily harsh and self-demanding. This means you tend to hold yourself to high standards, but may struggle with self-doubt.",
-            "Anxious": "Your self-talk is primarily worried and fear-driven. This means you tend to anticipate problems and feel cautious about taking risks."
+            "Encouraging": "Your inner voice lifts you up and helps you bounce back from setbacks with optimism.",
+            "Neutral": "Your inner voice stays calm and objective, keeping you grounded when uncertainty hits.",
+            "Critical": "Your inner voice drives high standards, though it's learning to be gentler along the way.",
+            "Anxious": "Your inner voice stays alert to risk, deeply aware and building trust in your own judgment."
         };
 
         var currentIdx = 0;
@@ -279,20 +279,21 @@
             ['A', 'B', 'C', 'D'].forEach(function(k) { if (scores[k] === maxScore) winners.push(typeNames[k]); });
 
             var resultTitle;
+            var resultDesc;
+
             if (winners.length === 1) {
                 document.getElementById('result-label').innerText = "Dominant Pattern";
-                resultTitle = "Your dominant pattern is " + winners[0];
+                resultTitle = winners[0];
+                resultDesc = descriptions[winners[0]];
             } else {
                 document.getElementById('result-label').innerText = "Your Pattern";
                 var lastWinner = winners.pop();
-                resultTitle = "Your profile is a mix of " + winners.join(", ") + " & " + lastWinner;
+                resultTitle = "A mix of " + winners.join(", ") + " & " + lastWinner;
+                resultDesc = "You exhibit a blend of inner voice patterns, adapting your self-talk to different situations.";
             }
-            document.getElementById('dominant-type').innerText = resultTitle;
 
-            // Updated Multi-Type Description Logic
-            document.getElementById('type-description').innerText = winners.length === 0 ? 
-                descriptions[Object.keys(scores).find(k => scores[k] === maxScore)] : 
-                "You have a versatile profile, allowing you to adapt your approach depending on the situation!";
+            document.getElementById('dominant-type').innerText = resultTitle;
+            document.getElementById('type-description').innerText = resultDesc;
 
             var chartArea = document.getElementById('chart-area');
             chartArea.innerHTML = '<h4 style="text-align:left; color:#888; font-size:12px; margin-bottom:20px; letter-spacing:1px;">PATTERN DISTRIBUTION</h4>';
